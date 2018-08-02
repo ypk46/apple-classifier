@@ -16,7 +16,7 @@ xavier = glorot_uniform(seed=None)
 constant_bias = Constant(0.2)
 
 # Kernel Regularizer
-k_reg = regularizers.l2(0.0002)
+k_reg = regularizers.l2(l=0.0002)
 
 
 def inception(layer, filters_batch):
@@ -36,7 +36,7 @@ def inception(layer, filters_batch):
                           kernel_regularizer=k_reg)(layer)
 
     second_tower = Conv2D(filters=filters_batch[2], kernel_size=3,
-                          padding=1, activation='relu',
+                          activation='relu', padding='same',
                           kernel_initializer=xavier,
                           bias_initializer=constant_bias,
                           kernel_regularizer=k_reg)(second_tower)
@@ -49,13 +49,13 @@ def inception(layer, filters_batch):
                          kernel_regularizer=k_reg)(layer)
 
     third_tower = Conv2D(filters=filters_batch[4], kernel_size=5,
-                         padding=2, activation='relu',
+                         activation='relu', padding='same',
                          kernel_initializer=xavier,
                          bias_initializer=constant_bias,
                          kernel_regularizer=k_reg)(layer)
 
     # Fourth Tower
-    fourth_tower = MaxPooling2D(pool_size=3, strides=1, padding=1)(layer)
+    fourth_tower = MaxPooling2D(pool_size=3, strides=1, padding='same')(layer)
 
     fourth_tower = Conv2D(filters=filters_batch[5], kernel_size=1,
                           padding='same', activation='relu',
@@ -89,7 +89,7 @@ def createModel(inputShape):
     input = Input(inputShape)
 
     conv1 = Conv2D(filters=64, kernel_size=7, strides=2,
-                   padding=3, activation='relu',
+                   padding='same', activation='relu',
                    kernel_initializer=xavier,
                    bias_initializer=constant_bias,
                    kernel_regularizer=k_reg)(input)
@@ -104,7 +104,7 @@ def createModel(inputShape):
                    kernel_regularizer=k_reg,
                    bias_initializer=constant_bias)(norm1)
 
-    conv3 = Conv2D(filters=192, kernel_size=3, padding=1,
+    conv3 = Conv2D(filters=192, kernel_size=3,
                    activation='relu', kernel_initializer=xavier,
                    kernel_regularizer=k_reg,
                    bias_initializer=constant_bias)(conv2)

@@ -171,12 +171,12 @@ for epoch in range(100):
     training_set = datagen.flow_from_directory(
         'dataset/training',
         target_size=(224, 224),
-        batch_size=2340)
+        batch_size=500)
 
     test_set = datagen.flow_from_directory(
         'dataset/test',
         target_size=(224, 224),
-        batch_size=700)
+        batch_size=100)
 
     results = leave_model.fit_generator(
         training_set,

@@ -7,7 +7,7 @@ from keras.layers import Dense, Conv2D, AveragePooling2D, MaxPooling2D, Dropout,
 from keras.preprocessing.image import ImageDataGenerator
 
 nClasses = 2
-input_shape = (128, 128, 3)
+input_shape = (224, 224, 3)
 
 # Kernel Initializers
 xavier = glorot_uniform(seed=None)
@@ -170,12 +170,12 @@ for epoch in range(100):
 
     training_set = datagen.flow_from_directory(
         'dataset/training',
-        target_size=(128, 128),
+        target_size=(224, 224),
         batch_size=2340)
 
     test_set = datagen.flow_from_directory(
         'dataset/test',
-        target_size=(128, 128),
+        target_size=(224, 224),
         batch_size=700)
 
     results = leave_model.fit_generator(

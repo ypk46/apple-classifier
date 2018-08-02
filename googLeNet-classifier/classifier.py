@@ -166,24 +166,26 @@ leave_model.compile(optimizer=optimizer,
                     loss="categorical_crossentropy", metrics=["accuracy"], loss_weights=[1.])
 
 
-for epoch in range(100):
+# for epoch in range(100):
 
-    training_set = datagen.flow_from_directory(
-        'dataset/training',
-        target_size=(224, 224),
-        batch_size=500)
+training_set = datagen.flow_from_directory(
+    'dataset/training',
+    target_size=(224, 224),
+    batch_size=100)
 
-    test_set = datagen.flow_from_directory(
-        'dataset/test',
-        target_size=(224, 224),
-        batch_size=100)
+test_set = datagen.flow_from_directory(
+    'dataset/test',
+    target_size=(224, 224),
+    batch_size=100)
 
-    results = leave_model.fit_generator(
-        training_set,
-        epochs=1,
-        validation_data=test_set)
+results = leave_model.fit_generator(
+    training_set,
+    steps_per_epoch=8856,
+    epochs=1,
+    validation_data=test_set,
+    validation_steps=2216)
 
-    leave_model.save("mango_model_" + epoch + ".h5")
+# leave_model.save("mango_model_" + epoch + ".h5")
 
 leave_model.summary()
 

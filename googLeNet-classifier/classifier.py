@@ -146,7 +146,7 @@ def createModel(inputShape):
     output = Dense(nClasses, activation='softmax',
                    kernel_regularizer=k_reg)(drop)
 
-    model = Model(inputs=input, outputs=[output, aux1, aux2])
+    model = Model(inputs=input, outputs=[output])
     return model
 
 
@@ -163,7 +163,7 @@ optimizer = optimizers.Adam(
 leave_model = createModel(input_shape)
 
 leave_model.compile(optimizer=optimizer,
-                    loss="categorical_crossentropy", metrics=["accuracy"], loss_weights=[1., 0.3, 0.3])
+                    loss="categorical_crossentropy", metrics=["accuracy"], loss_weights=[1.])
 
 
 for epoch in range(100):

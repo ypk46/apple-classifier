@@ -61,8 +61,8 @@ leave_model.summary()
 
 history = leave_model.fit_generator(
     training_set,
-    steps_per_epoch=200,
-    epochs=20,
+    steps_per_epoch=40,
+    epochs=5,
     validation_data=test_set,
     validation_steps=20)
 

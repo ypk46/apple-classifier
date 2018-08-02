@@ -181,7 +181,7 @@ test_set = datagen.flow_from_directory(
 results = leave_model.fit_generator(
     training_set,
     steps_per_epoch=8856,
-    epochs=1,
+    epochs=15,
     validation_data=test_set,
     validation_steps=2216)
 

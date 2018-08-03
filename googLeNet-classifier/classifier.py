@@ -98,7 +98,7 @@ def createModel(inputShape):
 
     norm1 = BatchNormalization(axis=3)(pool1)
 
-    conv2 = Conv2D(filters=64, kernel_size=1,
+    conv2 = Conv2D(filters=64, kernel_size=3,
                    activation="relu",
                    kernel_initializer=xavier,
                    kernel_regularizer=k_reg,
@@ -151,11 +151,15 @@ def createModel(inputShape):
 
 
 # Data Preparation
-datagen = ImageDataGenerator(
+training_datagen = ImageDataGenerator(
+    rescale=1./255,
     rotation_range=45,
     width_shift_range=0.1,
     height_shift_range=0.1,
     horizontal_flip=True)
+
+test_datagen = ImageDataGenerator(rescale=1./255)
+
 
 optimizer = optimizers.Adam(
     lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
@@ -165,28 +169,26 @@ leave_model = createModel(input_shape)
 leave_model.compile(optimizer=optimizer,
                     loss="categorical_crossentropy", metrics=["accuracy"], loss_weights=[1.])
 
+# loss_weights=[1., 0.3, 0.3]
+leave_model.summary()
 
-# for epoch in range(100):
-
-training_set = datagen.flow_from_directory(
+training_set = training_datagen.flow_from_directory(
     'dataset/training',
     target_size=(224, 224),
-    batch_size=100)
+    batch_size=64,
+    class_mode='categorical')
 
-test_set = datagen.flow_from_directory(
+test_set = test_datagen.flow_from_directory(
     'dataset/test',
     target_size=(224, 224),
-    batch_size=100)
+    batch_size=64,
+    class_mode='categorical')
 
 results = leave_model.fit_generator(
     training_set,
-    steps_per_epoch=8856,
+    steps_per_epoch=2340,
     epochs=15,
     validation_data=test_set,
-    validation_steps=2216)
-
-# leave_model.save("mango_model_" + epoch + ".h5")
-
-leave_model.summary()
+    validation_steps=700)
 
 leave_model.save("mango_model.h5")

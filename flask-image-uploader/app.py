@@ -8,23 +8,24 @@ from keras.preprocessing import image
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = os.path.basename('flask-image-uploader/images')
+UPLOAD_FOLDER = os.path.basename('images')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-classifier = load_model('mango_model.h5')
+classifier = load_model('apple_model.h5')
 classifier._make_predict_function()
 
 
 def get_label(result):
     switcher = {
         0: "Disease",
-        1: "Healthy"
+        1: "Disease",
+        2: "Healthy"
     }
     return switcher.get(result, "Invalid Class")
 
 
 def classify(picture):
-    test_image = image.load_img(picture, target_size=(256, 256))
+    test_image = image.load_img(picture, target_size=(224, 224))
     test_image = image.img_to_array(test_image)
     test_image = np.expand_dims(test_image, axis=0)
     result = classifier.predict(test_image)

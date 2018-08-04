@@ -1,0 +1,9 @@
+# loss_weights=[1., 0.3, 0.3]
+
+
+kernel_initializer=xavier,
+kernel_regularizer=k_reg,
+bias_initializer=constant_bias
+
+2488
+623

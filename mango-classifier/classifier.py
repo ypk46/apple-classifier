@@ -154,6 +154,24 @@ def modelInizialization():
     return leave_model
 
 
+def plotResult(history):
+    plt.plot(history.history['acc'])
+    plt.plot(history.history['val_acc'])
+    plt.title('model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.show()
+    # summarize history for loss
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.title('model loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.show()
+
+
 def modelTrain():
 
     model = modelInizialization()
@@ -184,6 +202,7 @@ def modelTrain():
         validation_data=test_set,
         validation_steps=412)
 
+    plotResult(results)
     model.save("mango_model.h5")
 
 

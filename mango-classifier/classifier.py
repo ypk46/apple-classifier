@@ -202,8 +202,9 @@ def modelTrain():
         validation_data=test_set,
         validation_steps=412)
 
-    plotResult(results)
     model.save("mango_model.h5")
+    model.save_weights("mango_weights.h5")
+    plotResult(results)
 
 
 def exit():

@@ -161,8 +161,6 @@ def modelTrain():
     training_datagen = ImageDataGenerator(
         rescale=1./255,
         rotation_range=45,
-        width_shift_range=0.1,
-        height_shift_range=0.1,
         horizontal_flip=True)
 
     test_datagen = ImageDataGenerator(rescale=1./255)
@@ -181,10 +179,10 @@ def modelTrain():
 
     results = model.fit_generator(
         training_set,
-        steps_per_epoch=2488,
+        steps_per_epoch=1645,
         epochs=15,
         validation_data=test_set,
-        validation_steps=623)
+        validation_steps=412)
 
     model.save("mango_model.h5")
 

@@ -11,15 +11,19 @@ app = Flask(__name__)
 UPLOAD_FOLDER = os.path.basename('images')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-classifier = load_model('apple_model.h5')
+classifier = load_model('apple_model_v2.h5')
+
 classifier._make_predict_function()
+
+print(classifier)
 
 
 def get_label(result):
     switcher = {
-        0: "Disease",
-        1: "Disease",
-        2: "Healthy"
+        0: "Scab",
+        1: "Black_Rot",
+        2: "Rust",
+        3: "Healthy"
     }
     return switcher.get(result, "Invalid Class")
 
@@ -29,7 +33,6 @@ def classify(picture):
     test_image = image.img_to_array(test_image)
     test_image = np.expand_dims(test_image, axis=0)
     result = classifier.predict(test_image)
-
     return get_label(result.argmax())
 
 

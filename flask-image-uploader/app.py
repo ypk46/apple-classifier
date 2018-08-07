@@ -6,9 +6,11 @@ from PIL import Image
 from keras.models import load_model
 from keras.preprocessing import image
 from keras.preprocessing.image import ImageDataGenerator
+from flask_cors import CORS
 
 
 app = Flask(__name__)
+CORS(app)
 
 UPLOAD_FOLDER = os.path.basename('images')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER

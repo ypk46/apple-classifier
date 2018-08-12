@@ -6,9 +6,10 @@ from keras.initializers import glorot_uniform, Constant
 from keras.models import Model
 from keras.layers import Dense, Conv2D, AveragePooling2D, MaxPooling2D, Dropout, Flatten, Input, BatchNormalization, concatenate, ZeroPadding2D
 from keras.preprocessing.image import ImageDataGenerator
+from keras.models import load_model
 
 n = 0
-nClasses = 4
+nClasses = 2
 input_shape = (224, 224, 3)
 
 # Kernel Initializers
@@ -132,7 +133,7 @@ def createModel(inputShape):
 
     flat = Flatten()(conv6)
     drop = Dropout(0.4)(flat)
-    output = Dense(nClasses, activation='softmax',
+    output = Dense(1, activation='sigmoid',
                    kernel_regularizer=k_reg)(drop)
 
     model = Model(inputs=input, outputs=[output])
@@ -147,7 +148,7 @@ def modelInizialization():
     leave_model = createModel(input_shape)
 
     leave_model.compile(optimizer=optimizer,
-                        loss="categorical_crossentropy", metrics=["accuracy"], loss_weights=[1.])
+                        loss="binary_crossentropy", metrics=["accuracy"], loss_weights=[1.])
 
     leave_model.summary()
 
@@ -155,21 +156,25 @@ def modelInizialization():
 
 
 def plotResult(history):
+
+    plt.figure(1)
+    plt.subplot(211)
     plt.plot(history.history['acc'])
     plt.plot(history.history['val_acc'])
     plt.title('model accuracy')
     plt.ylabel('accuracy')
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='upper left')
-    plt.show()
+
     # summarize history for loss
+    plt.subplot(212)
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
     plt.title('model loss')
     plt.ylabel('loss')
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='upper left')
-    plt.show()
+    plt.savefig('testplot.png')
 
 
 def modelTrain():
@@ -184,27 +189,26 @@ def modelTrain():
     test_datagen = ImageDataGenerator(rescale=1./255)
 
     training_set = training_datagen.flow_from_directory(
-        'dataset/training',
+        'mango/training',
         target_size=(224, 224),
         batch_size=64,
-        class_mode='categorical')
+        class_mode='binary')
 
     test_set = test_datagen.flow_from_directory(
-        'dataset/test',
+        'mango/test',
         target_size=(224, 224),
         batch_size=64,
-        class_mode='categorical')
+        class_mode='binary')
 
     results = model.fit_generator(
         training_set,
-        steps_per_epoch=1645,
-        epochs=15,
+        steps_per_epoch=510,
+        epochs=20,
         validation_data=test_set,
-        validation_steps=412)
-
-    model.save("mango_model.h5")
-    model.save_weights("mango_weights.h5")
+        validation_steps=170)
     plotResult(results)
+    model.save("mango_final.h5")
+    model.save_weights("mango_final_weights.h5")
 
 
 def exit():

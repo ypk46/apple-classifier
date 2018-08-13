@@ -7,7 +7,7 @@ from keras.models import Model
 from keras.layers import Dense, Conv2D, AveragePooling2D, MaxPooling2D, Dropout, Flatten, Input, BatchNormalization, concatenate, ZeroPadding2D
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import load_model
-
+plt.switch_backend('agg')
 n = 0
 nClasses = 2
 input_shape = (224, 224, 3)
@@ -133,7 +133,7 @@ def createModel(inputShape):
 
     flat = Flatten()(conv6)
     drop = Dropout(0.4)(flat)
-    output = Dense(1, activation='sigmoid',
+    output = Dense(nClasses, activation='softmax',
                    kernel_regularizer=k_reg)(drop)
 
     model = Model(inputs=input, outputs=[output])
@@ -148,7 +148,7 @@ def modelInizialization():
     leave_model = createModel(input_shape)
 
     leave_model.compile(optimizer=optimizer,
-                        loss="binary_crossentropy", metrics=["accuracy"], loss_weights=[1.])
+                        loss="categorical_crossentropy", metrics=["accuracy"], loss_weights=[1.])
 
     leave_model.summary()
 
@@ -192,13 +192,13 @@ def modelTrain():
         'mango/training',
         target_size=(224, 224),
         batch_size=64,
-        class_mode='binary')
+        class_mode='categorical')
 
     test_set = test_datagen.flow_from_directory(
         'mango/test',
         target_size=(224, 224),
         batch_size=64,
-        class_mode='binary')
+        class_mode='categorical')
 
     results = model.fit_generator(
         training_set,

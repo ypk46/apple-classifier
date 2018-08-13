@@ -15,7 +15,7 @@ CORS(app)
 UPLOAD_FOLDER = os.path.basename('images')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-classifier = load_model('models/apple_model_v2.h5')
+classifier = load_model('models/mango_final.h5')
 
 classifier._make_predict_function()
 
@@ -25,9 +25,7 @@ print(classifier)
 def get_label(result):
     switcher = {
         0: "Black_Rot",
-        1: "Healthy",
-        2: "Rust",
-        3: "Rust"
+        1: "Healthy"
     }
     return switcher.get(result, "Invalid Class")
 
